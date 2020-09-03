@@ -13,6 +13,14 @@ const coursesArray = [
     {
         id: 3,
         name: 'inglés'
+    },
+    {
+        id: 4,
+        name: 'Integracion'
+    },
+    {
+        id: 5,
+        name: 'Tesis'
     }
 ]
 
@@ -42,6 +50,21 @@ const studentsArray = [
         name: 'Zurdo',
         courseId: 1
     },
+    {
+        id: 6,
+        name: 'lopez',
+        courseId: 2
+    },
+    {
+        id: 7,
+        name: 'Jose',
+        courseId: 5
+    },
+    {
+        id: 8,
+        name: 'lopez Lovaton',
+        courseId: 4
+    }
 ]
 
 router.get('/course', function(req, res) {
