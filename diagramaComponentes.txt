@@ -1,0 +1,27 @@
+@startuml
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+
+Users(sources, "Events", "same users")
+package "examenIntegracionService" {
+   [Routes Component] ->[index Component]
+  
+}
+
+node "FrontApp" {
+  [Logica Component] <-->[index.html]
+}
+
+cloud {
+  [Github]
+}
+cloud {
+  [Heroku]
+}
+
+
+[index Component] --> [Github]
+[Github] --> [Heroku] 
+[Heroku] <--> [Logica Component]
+sources --> [index.html]
+@enduml

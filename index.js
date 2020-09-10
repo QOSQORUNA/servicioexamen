@@ -16,9 +16,9 @@ app.use((req, res, next) => {
 app.use('/api/v1/score', apiV1);
 
 
-// app.listen(3000, () => {
-//     console.log('Server running in 3000');
-// })
-app.listen(port, function() {
-    console.log('Servidorciado en el puerto 8080.');
-   });
+app.listen(3000, () => {
+    console.log('Server running in 3000');
+})
+// app.listen(port, function() {
+//     console.log('Servidorciado en el puerto 8080.');
+//    });

@@ -11,7 +11,7 @@ const proveedorArray = [
         famMuni: true,
         famCongreso: true,
         estadoProv: false,
-        rubro: 'abarrotes'
+        rubro: 1
     },
     {
         id: 2,
@@ -22,7 +22,7 @@ const proveedorArray = [
         famMuni: false,
         famCongreso: false,
         estadoProv: false,
-        rubro: 'software'
+        rubro: 2
     },
     {
         id: 3,
@@ -33,7 +33,7 @@ const proveedorArray = [
         famMuni: false,
         famCongreso: false,
         estadoProv: true,
-        rubro: 'construccion'
+        rubro: 3
     },
     {
         id: 4,
@@ -44,7 +44,7 @@ const proveedorArray = [
         famMuni: false,
         famCongreso: false,
         estadoProv: true,
-        rubro: 'libreria'
+        rubro: 4
     },
     {
         id: 5,
@@ -55,7 +55,7 @@ const proveedorArray = [
         famMuni: true,
         famCongreso: true,
         estadoProv: false,
-        rubro: 'abarrotes'
+        rubro: 5
     },
     {
         id: 6,
@@ -66,7 +66,7 @@ const proveedorArray = [
         famMuni: false,
         famCongreso: false,
         estadoProv: true,
-        rubro: 'abarrotes'
+        rubro: 1
     },
     {
         id: 7,
@@ -77,8 +77,38 @@ const proveedorArray = [
         famMuni: true,
         famCongreso: true,
         estadoProv: true,
-        rubro: 'abarrotes'
+        rubro: 3
     },
+]
+
+const rubrosArray = [
+    {
+        id: 1,
+        name: 'abarrotes',
+     
+    },
+    {
+        id: 2,
+        name: 'software',
+       
+    },
+    {
+        id: 3,
+        name: 'construccion',
+       
+    },
+    {
+        id: 4,
+        name: 'libreria',
+    },
+    {
+        id: 5,
+        name: 'restaurant',
+    },
+    {
+        id: 6,
+        name: 'cerveceria',
+    }
 ]
 
 
@@ -120,23 +150,29 @@ router.get('/prov/dni/:provDni', function(req, res) {
 
 });
 
-// router.get('/course/:courseId/student', function(req, res) {
+router.get('/rubro', function(req, res) {
+    res.status(200).json({
+        content: rubrosArray
+    })
+});
 
-//     const course = coursesArray.find(item => item.id == req.params.courseId)
+router.get('/prov/:provId/rubro', function(req, res) {
 
-//     if (!course) return res.status(404).json({
-//         errors: [
-//             'Recurso no encontrado'
-//         ]
-//     })
+    const prov = proveedorArray.find(item => item.id == req.params.provId)
 
-//     const students = studentsArray.filter(item => item.courseId == req.params.courseId)
+    if (!prov) return res.status(404).json({
+        errors: [
+            'Recurso no encontrado'
+        ]
+    })
 
-//     res.status(200).json({
-//         content: {course, students}
-//     })
+    const rubro = rubrosArray.filter(item => item.id == prov.rubro)
+
+    res.status(200).json({
+        content:  rubro
+    })
     
-// });
+});
 
 // router.get('/course/:courseId/student/:studentId', function(req, res) {
 
