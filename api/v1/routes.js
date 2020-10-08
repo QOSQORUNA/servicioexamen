@@ -152,10 +152,10 @@ router.post('/course/:courseId/matriculas', function(req, res) {
 
     let idEstudiante = req.body.idEstudiante; // viene de el formulario
 
-    if (course.miembros.includes(idEstudiante)) {
-        return res.json({
+    if (course.miembros.includes(Number(idEstudiante))) {
+        return res.status(422).json({
             message: 'El estudiante ya está en este curso'
-        })
+        });
     }
 
     course.miembros.push(Number(idEstudiante));
