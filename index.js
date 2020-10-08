@@ -1,8 +1,11 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080;
+var bodyParser = require('body-parser');
 
 const apiV1 = require('./api/v1/routes');
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -13,12 +16,12 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/api/v1/score', apiV1);
+app.use('/api/v1', apiV1);
 
 
 app.listen(3000, () => {
-    console.log('Server running in 3000');
-})
-// app.listen(port, function() {
-//     console.log('Servidorciado en el puerto 8080.');
-//    });
+        console.log('Server running in 3000');
+    })
+    // app.listen(port, function() {
+    //     console.log('Servidorciado en el puerto 8080.');
+    //    });

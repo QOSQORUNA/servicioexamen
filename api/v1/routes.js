@@ -1,178 +1,171 @@
 var express = require('express');
 var router = express.Router();
 
-const proveedorArray = [
-    {
+const cursos = [{
         id: 1,
-        dni: '71002152',
-        name: 'Fernando',
-        lastName: 'Lovaton Lopez',
-        sancion: true,
-        famMuni: true,
-        famCongreso: true,
-        estadoProv: false,
-        rubro: 1
+        code: '1111',
+        name: 'matematica I',
+        miembros: [1, 2, 3]
     },
     {
         id: 2,
-        dni: '71002153',
-        name: 'Jose',
-        lastName: 'Lovaton Lopez',
-        sancion: true,
-        famMuni: false,
-        famCongreso: false,
-        estadoProv: false,
-        rubro: 2
+        code: '2222',
+        name: 'integracion',
+        miembros: [2]
     },
     {
         id: 3,
-        dni: '71002154',
-        name: 'lourdes',
-        lastName: 'Lopez Castillo',
-        sancion: false,
-        famMuni: false,
-        famCongreso: false,
-        estadoProv: true,
-        rubro: 3
-    },
-    {
-        id: 4,
-        dni: '71002155',
-        name: 'David',
-        lastName: 'Lovaton Lopez',
-        sancion: false,
-        famMuni: false,
-        famCongreso: false,
-        estadoProv: true,
-        rubro: 4
-    },
-    {
-        id: 5,
-        dni: '71002156',
-        name: 'Jhon',
-        lastName: 'Rupay Eugenio',
-        sancion: true,
-        famMuni: true,
-        famCongreso: true,
-        estadoProv: false,
-        rubro: 5
-    },
-    {
-        id: 6,
-        dni: '71002157',
-        name: 'Alejandro',
-        lastName: 'Rupay Fasabi',
-        sancion: false,
-        famMuni: false,
-        famCongreso: false,
-        estadoProv: true,
-        rubro: 1
-    },
-    {
-        id: 7,
-        dni: '71002158',
-        name: 'Brian',
-        lastName: 'Pando',
-        sancion: true,
-        famMuni: true,
-        famCongreso: true,
-        estadoProv: true,
-        rubro: 3
+        code: '3333',
+        name: 'ms I',
+        miembros: [1, 3]
     },
 ]
 
-const rubrosArray = [
-    {
+const alumno = [{
         id: 1,
-        name: 'abarrotes',
-     
+        name: 'jose',
+        apellido: 'lovaton',
+
     },
     {
         id: 2,
-        name: 'software',
-       
+        name: 'fernando',
+        apellido: 'lopez',
+
     },
     {
         id: 3,
-        name: 'construccion',
-       
+        name: 'alejandro',
+        apellido: 'rupay',
+
     },
     {
         id: 4,
-        name: 'libreria',
+        name: 'jhon',
+        apellido: 'rupay',
+
+    },
+]
+
+const pagos = [{
+        id: 1,
+        idAl: 1,
+        idCurso: 1,
+
     },
     {
-        id: 5,
-        name: 'restaurant',
+        id: 2,
+        idAl: 2,
+        idCurso: 3,
+
     },
     {
-        id: 6,
-        name: 'cerveceria',
+        id: 3,
+        idAl: 2,
+        idCurso: 2,
+
+    },
+    {
+        id: 4,
+        idAl: 1,
+        idCurso: 2,
+
+    },
+]
+
+
+
+
+
+router.get('/cursos', function(req, res) {
+    res.status(200).json({
+        content: cursos
+    });
+});
+
+router.get('/pagos', function(req, res) {
+    res.status(200).json({
+        content: pagos
+    });
+});
+router.get('/student', function(req, res) {
+    res.status(200).json({
+        content: alumno
+    });
+});
+
+router.get('/student/:studentId/course', function(req, res) {
+
+    const estudiante = alumno.find(item => item.id == req.params.studentId);
+
+    if (!estudiante) return res.status(404).json({
+        errors: [
+            'Recurso no encontrado'
+        ]
+    })
+
+    let estudianteCursos = [];
+
+    cursos.forEach(item => {
+        if (item.miembros.includes(estudiante.id)) {
+            estudianteCursos.push(item);
+        }
+    });
+
+    const courses = estudianteCursos;
+
+    res.status(200).json({
+        content: { estudiante, courses }
+    })
+
+});
+
+
+router.get('/course/:courseId/pagos', function(req, res) {
+
+    const course = cursos.find(item => item.id == req.params.courseId)
+
+    if (!course) return res.status(404).json({
+        errors: [
+            'Recurso no encontrado'
+        ]
+    })
+
+    const pay = pagos.filter(item => item.idCurso == req.params.courseId)
+
+    res.status(200).json({
+        content: { course, pay }
+    })
+
+});
+
+
+router.post('/course/:courseId/matriculas', function(req, res) {
+
+    const course = cursos.find(item => item.id == req.params.courseId)
+
+    if (!course) return res.status(404).json({
+        errors: [
+            'Recurso no encontrado'
+        ]
+    })
+
+    let idEstudiante = req.body.idEstudiante; // viene de el formulario
+
+    if (course.miembros.includes(idEstudiante)) {
+        return res.json({
+            message: 'El estudiante ya está en este curso'
+        })
     }
-]
 
-
-
-router.get('/prov', function(req, res) {
-    res.status(200).json({
-        content: proveedorArray
-    })
-});
-
-router.get('/prov/:provId', function(req, res) {
-
-    const provId = proveedorArray.find(item => item.id == req.params.provId)
-    
-    if (!provId) return res.status(404).json({
-        errors: [
-            'Recurso no encontrado'
-        ]
-    })
+    course.miembros.push(Number(idEstudiante));
 
     res.status(200).json({
-        content: provId
-    })
-
-});
-router.get('/prov/dni/:provDni', function(req, res) {
-
-    const provDni = proveedorArray.find(item => item.dni == req.params.provDni)
-    
-    if (!provDni) return res.status(404).json({
-        errors: [
-            'Recurso no encontrado'
-        ]
-    })
-
-    res.status(200).json({
-        content: provDni
+        content: { course }
     })
 
 });
 
-router.get('/rubro', function(req, res) {
-    res.status(200).json({
-        content: rubrosArray
-    })
-});
-
-router.get('/prov/:provId/rubro', function(req, res) {
-
-    const prov = proveedorArray.find(item => item.id == req.params.provId)
-
-    if (!prov) return res.status(404).json({
-        errors: [
-            'Recurso no encontrado'
-        ]
-    })
-
-    const rubro = rubrosArray.filter(item => item.id == prov.rubro)
-
-    res.status(200).json({
-        content:  rubro
-    })
-    
-});
 
 // router.get('/course/:courseId/student/:studentId', function(req, res) {
 
